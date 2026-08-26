@@ -10,7 +10,7 @@ function scene(canvas,modelMode=false){
  s.add(new THREE.HemisphereLight(0xffffff,0x222222,2));const l=new THREE.DirectionalLight(0xffffff,4);l.position.set(3,4,5);s.add(l);
  let root=null,controls=null;
  if(modelMode){controls=new OrbitControls(cam,canvas);controls.enableDamping=true;controls.autoRotate=true;controls.autoRotateSpeed=1.2;
-  new GLTFLoader().load('../assets/models/3dmodel.glb',g=>{root=g.scene;s.add(root);fit();document.querySelector('#status').style.display='none'},()=>{},()=>{document.querySelector('#status').textContent='PLACE 3dmodel.glb IN assets/models/'});}
+  new GLTFLoader().load('./assets/models/3dmodel.glb',g=>{root=g.scene;s.add(root);fit();document.querySelector('#status').style.display='none'},()=>{},()=>{document.querySelector('#status').textContent='PLACE 3dmodel.glb IN assets/models/'});}
  else {const g=new THREE.IcosahedronGeometry(1.3,2);root=new THREE.Mesh(g,new THREE.MeshPhysicalMaterial({color:0x777777,metalness:.7,roughness:.2,clearcoat:1}));s.add(root);controls=null;}
  function fit(){const box=new THREE.Box3().setFromObject(root),size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3()),m=Math.max(size.x,size.y,size.z);root.position.sub(center);cam.position.set(m*1.8,m*1.1,m*1.8);cam.lookAt(0,0,0);if(controls){controls.target.set(0,0,0);controls.update()}}
  function resize(){const w=canvas.clientWidth||innerWidth,h=canvas.clientHeight||innerHeight;r.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}addEventListener('resize',resize);resize();
