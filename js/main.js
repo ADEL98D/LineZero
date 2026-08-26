@@ -1,103 +1,25 @@
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.176.0/build/three.module.js';
+import {GLTFLoader} from 'https://cdn.jsdelivr.net/npm/three@0.176.0/examples/jsm/loaders/GLTFLoader.js';
+import {OrbitControls} from 'https://cdn.jsdelivr.net/npm/three@0.176.0/examples/jsm/controls/OrbitControls.js';
 
-const loaderLine = document.querySelector(".loader-line span");
-let progress = 0;
-const timer = setInterval(() => {
-  progress += Math.random() * 18;
-  if (progress >= 100) { progress = 100; clearInterval(timer); }
-  loaderLine.style.width = progress + "%";
-}, 90);
+window.addEventListener('load',()=>setTimeout(()=>document.querySelector('#loader').classList.add('done'),700));
 
-window.addEventListener("load", () => setTimeout(() => document.documentElement.classList.add("loaded"), 700));
-
-/* Interactive hero object — intentionally lightweight for GitHub Pages. */
-const canvas = document.getElementById("hero-canvas");
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, .1, 100);
-camera.position.set(0, 0, 6);
-
-const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
-renderer.setPixelRatio(Math.min(devicePixelRatio, 1.8));
-renderer.setSize(innerWidth, innerHeight);
-renderer.outputColorSpace = THREE.SRGBColorSpace;
-
-const group = new THREE.Group();
-scene.add(group);
-
-const geometry = new THREE.IcosahedronGeometry(1.55, 2);
-const material = new THREE.MeshBasicMaterial({color:0x8d8d8d, wireframe:true, transparent:true, opacity:.28});
-const mesh = new THREE.Mesh(geometry, material);
-group.add(mesh);
-
-const core = new THREE.Mesh(
-  new THREE.IcosahedronGeometry(1.28, 3),
-  new THREE.MeshBasicMaterial({color:0x101010, transparent:true, opacity:.8})
-);
-group.add(core);
-
-const mouse = {x:0,y:0};
-window.addEventListener("pointermove", e => {
-  mouse.x = (e.clientX / innerWidth - .5);
-  mouse.y = (e.clientY / innerHeight - .5);
-});
-
-function animate(){
-  requestAnimationFrame(animate);
-  group.rotation.y += .0018;
-  group.rotation.x += .0007;
-  group.rotation.y += mouse.x * .0012;
-  group.rotation.x += mouse.y * .0008;
-  const s = 1 + Math.sin(performance.now()*.0006)*.025;
-  group.scale.setScalar(s);
-  renderer.render(scene,camera);
+function scene(canvas,modelMode=false){
+ const r=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});r.setPixelRatio(Math.min(devicePixelRatio,2));
+ const s=new THREE.Scene();const cam=new THREE.PerspectiveCamera(35,1,.01,100);cam.position.set(2,1.2,3);
+ s.add(new THREE.HemisphereLight(0xffffff,0x222222,2));const l=new THREE.DirectionalLight(0xffffff,4);l.position.set(3,4,5);s.add(l);
+ let root=null,controls=null;
+ if(modelMode){controls=new OrbitControls(cam,canvas);controls.enableDamping=true;controls.autoRotate=true;controls.autoRotateSpeed=1.2;
+  new GLTFLoader().load('../assets/models/3dmodel.glb',g=>{root=g.scene;s.add(root);fit();document.querySelector('#status').style.display='none'},()=>{},()=>{document.querySelector('#status').textContent='PLACE 3dmodel.glb IN assets/models/'});}
+ else {const g=new THREE.IcosahedronGeometry(1.3,2);root=new THREE.Mesh(g,new THREE.MeshPhysicalMaterial({color:0x777777,metalness:.7,roughness:.2,clearcoat:1}));s.add(root);controls=null;}
+ function fit(){const box=new THREE.Box3().setFromObject(root),size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3()),m=Math.max(size.x,size.y,size.z);root.position.sub(center);cam.position.set(m*1.8,m*1.1,m*1.8);cam.lookAt(0,0,0);if(controls){controls.target.set(0,0,0);controls.update()}}
+ function resize(){const w=canvas.clientWidth||innerWidth,h=canvas.clientHeight||innerHeight;r.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}addEventListener('resize',resize);resize();
+ function tick(){if(root&&!modelMode){root.rotation.x+=.002;root.rotation.y+=.004}if(controls)controls.update();r.render(s,cam);requestAnimationFrame(tick)}tick();
+ return {fit,get root(){return root},controls};
 }
-animate();
-
-window.addEventListener("resize",()=>{
-  camera.aspect = innerWidth/innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(innerWidth,innerHeight);
-});
-
-/* Portfolio filters */
-const filters = document.querySelectorAll("#filters button");
-const cards = document.querySelectorAll(".project-card");
-filters.forEach(btn => btn.addEventListener("click",()=>{
-  filters.forEach(x=>x.classList.remove("active"));
-  btn.classList.add("active");
-  const f = btn.dataset.filter;
-  cards.forEach(card => {
-    card.style.display = (f==="all" || card.dataset.category===f) ? "" : "none";
-  });
-}));
-
-/* Project modal */
-const modal = document.getElementById("projectModal");
-const modalTitle = document.getElementById("modalTitle");
-const modalType = document.getElementById("modalType");
-const closeModal = () => { modal.classList.remove("open"); document.body.classList.remove("no-scroll"); modal.setAttribute("aria-hidden","true"); };
-cards.forEach(card=>card.addEventListener("click",()=>{
-  modalTitle.textContent = card.dataset.title;
-  modalType.textContent = card.dataset.type;
-  modal.classList.add("open");
-  document.body.classList.add("no-scroll");
-  modal.setAttribute("aria-hidden","false");
-}));
-document.getElementById("modalClose").addEventListener("click",closeModal);
-modal.addEventListener("click",e=>{ if(e.target===modal) closeModal(); });
-document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeModal(); });
-
-/* Tiny magnetic CTA effect */
-document.querySelectorAll(".magnetic").forEach(el=>{
-  el.addEventListener("pointermove",e=>{
-    const r=el.getBoundingClientRect();
-    el.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.08}px,${(e.clientY-r.top-r.height/2)*.08}px)`;
-  });
-  el.addEventListener("pointerleave",()=>el.style.transform="");
-});
-
-/* Hide GLB placeholder once model loads */
-const mv = document.getElementById("modelViewer");
-const ph = document.getElementById("viewerPlaceholder");
-mv.addEventListener("load",()=>ph.style.display="none");
-mv.addEventListener("error",()=>ph.style.display="grid");
+scene(document.querySelector('#hero'));
+const v=scene(document.querySelector('#model'),true);
+document.querySelector('#reset').onclick=()=>v.fit();
+document.querySelector('#auto').onclick=()=>v.controls.autoRotate=!v.controls.autoRotate;
+let wire=false;document.querySelector('#wire').onclick=()=>{wire=!wire;if(v.root)v.root.traverse(x=>{if(x.isMesh&&x.material)x.material.wireframe=wire})};
+document.querySelectorAll('.filters button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.filters button').forEach(x=>x.classList.remove('active'));b.classList.add('active');const f=b.dataset.f;document.querySelectorAll('.grid article').forEach(x=>x.style.display=f==='all'||x.dataset.t===f?'':'none')});
