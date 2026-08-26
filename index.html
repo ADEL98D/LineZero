@@ -1,12 +1,477 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LINE ZERO — Beyond Shapes</title><link rel="stylesheet" href="css/style.css"></head><body>
-<div id="loader"><b>LINE ZERO</b><i></i></div>
-<header><a href="#top">LINE ZERO</a><nav><a href="#work">Work</a><a href="#services">Services</a><a href="#studio">Studio</a><a href="#contact">Contact</a></nav></header>
-<section id="top" class="hero"><canvas id="hero"></canvas><div class="copy"><small>3D ART · DESIGN · DIGITAL</small><h1>BEYOND<br><em>SHAPES.</em></h1><p>Photorealistic 3D, product visualization, architectural worlds and interactive experiences.</p><a class="btn" href="#work">EXPLORE THE WORK ↓</a></div><div class="meta">LINE ZERO / 2026 <span>SCROLL TO EXPLORE</span></div></section>
-<section class="intro"><small>01 / INTRO</small><div><h2>We turn <i>ideas</i><br>into visual worlds.</h2><p>LINE ZERO is a 3D design studio focused on modeling, photorealistic rendering, animation and interactive digital content.</p></div></section>
-<section id="work" class="work"><div class="head"><div><small>SELECTED WORK</small><h2>Made in 3D.</h2></div><div class="filters"><button class="active" data-f="all">All</button><button data-f="product">Product</button><button data-f="archviz">Archviz</button><button data-f="digital">Digital</button></div></div>
-<div class="grid"><article data-t="product"><div class="media model"><canvas class="thumb"></canvas><label>INTERACTIVE 3D</label></div><h3>3D MODEL / CONFIGURATOR</h3><p>Interactive GLB presentation</p></article><article data-t="product"><div class="media a"></div><h3>PRODUCT VISUALIZATION</h3><p>Modeling · materials · rendering</p></article><article class="wide" data-t="archviz"><div class="media b"></div><h3>ARCHITECTURAL WORLD</h3><p>Interior / exterior visualization</p></article><article data-t="digital"><div class="media c"></div><h3>IMMERSIVE DIGITAL</h3><p>Web · VR · interactive environments</p></article></div></section>
-<section class="viewer-section"><div class="viewer-copy"><small>LIVE MODEL VIEWER</small><h2>Your model.<br><i>On the web.</i></h2><p>Place your model at <code>assets/models/3dmodel.glb</code>. This template loads it automatically.</p><div><button id="reset">RESET</button><button id="wire">WIREFRAME</button><button id="auto">AUTO ROTATE</button></div></div><div class="viewer"><canvas id="model"></canvas><span id="status">LOADING 3DMODEL.GLB…</span><label>DRAG · ROTATE / WHEEL · ZOOM</label></div></section>
-<section id="services" class="services"><small>02 / SERVICES</small><div><div><b>01</b><h3>3D MODELING</h3><p>Products, furniture, environments and detailed assets.</p></div><div><b>02</b><h3>PHOTOREALISTIC RENDERING</h3><p>Product, e-commerce, advertising and architectural imagery.</p></div><div><b>03</b><h3>ANIMATION</h3><p>Cinematic product animation and motion design.</p></div><div><b>04</b><h3>INTERACTIVE 3D</h3><p>WebGL, GLB viewers, configurators, VR/AR and Unreal Engine.</p></div></div></section>
-<section id="studio" class="studio"><small>03 / STUDIO</small><h2>From the first line<br>to the final pixel.</h2><p>Blender · Unreal Engine · Unity · QGIS · ArcGIS · Python · Adobe Creative Cloud</p></section>
-<section id="contact" class="contact"><small>04 / CONTACT</small><h2>Have a shape<br>in mind?</h2><a class="btn" href="mailto:hello@linezero.studio">LET'S BUILD IT ↗</a><p>Replace the email in index.html with your real address.</p></section><footer><b>LINE ZERO</b><span>BEYOND SHAPES.</span><span>© 2026</span></footer>
-<script type="module" src="js/main.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>LINE ZERO — Beyond Shapes</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Three.js Import Map -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.176.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.176.0/examples/jsm/"
+        }
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- =========================
+         LOADING SCREEN
+    ========================== -->
+
+    <div id="loader">
+        <div>
+            <b>LINE ZERO</b>
+            <i></i>
+        </div>
+    </div>
+
+
+    <!-- =========================
+         NAVIGATION
+    ========================== -->
+
+    <header>
+
+        <a href="#top" class="logo">
+            LINE ZERO
+        </a>
+
+        <nav>
+            <a href="#work">Work</a>
+            <a href="#services">Services</a>
+            <a href="#studio">Studio</a>
+            <a href="#contact">Contact</a>
+        </nav>
+
+    </header>
+
+
+    <!-- =========================
+         HERO
+    ========================== -->
+
+    <section id="top" class="hero">
+
+        <canvas id="hero"></canvas>
+
+        <div class="copy">
+
+            <small>
+                3D ART · DESIGN · DIGITAL
+            </small>
+
+            <h1>
+                BEYOND<br>
+                <em>SHAPES.</em>
+            </h1>
+
+            <p>
+                Photorealistic 3D, product visualization,
+                architectural worlds and interactive experiences.
+            </p>
+
+            <a class="btn" href="#work">
+                EXPLORE THE WORK ↓
+            </a>
+
+        </div>
+
+        <div class="meta">
+
+            <span>
+                LINE ZERO / 2026
+            </span>
+
+            <span>
+                SCROLL TO EXPLORE
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         INTRO
+    ========================== -->
+
+    <section class="intro">
+
+        <small>
+            01 / INTRO
+        </small>
+
+        <div>
+
+            <h2>
+                We turn <i>ideas</i><br>
+                into visual worlds.
+            </h2>
+
+            <p>
+                LINE ZERO is a 3D design studio focused on
+                modeling, photorealistic rendering, animation
+                and interactive digital content.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         WORK
+    ========================== -->
+
+    <section id="work" class="work">
+
+        <div class="head">
+
+            <div>
+
+                <small>
+                    SELECTED WORK
+                </small>
+
+                <h2>
+                    Made in 3D.
+                </h2>
+
+            </div>
+
+            <div class="filters">
+
+                <button class="active" data-f="all">
+                    All
+                </button>
+
+                <button data-f="product">
+                    Product
+                </button>
+
+                <button data-f="archviz">
+                    Archviz
+                </button>
+
+                <button data-f="digital">
+                    Digital
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="grid">
+
+            <!-- INTERACTIVE MODEL -->
+
+            <article data-t="product">
+
+                <div class="media model">
+
+                    <canvas class="thumb"></canvas>
+
+                    <label>
+                        INTERACTIVE 3D
+                    </label>
+
+                </div>
+
+                <h3>
+                    3D MODEL / CONFIGURATOR
+                </h3>
+
+                <p>
+                    Interactive GLB presentation
+                </p>
+
+            </article>
+
+
+            <!-- PRODUCT -->
+
+            <article data-t="product">
+
+                <div class="media a"></div>
+
+                <h3>
+                    PRODUCT VISUALIZATION
+                </h3>
+
+                <p>
+                    Modeling · materials · rendering
+                </p>
+
+            </article>
+
+
+            <!-- ARCHVIZ -->
+
+            <article class="wide" data-t="archviz">
+
+                <div class="media b"></div>
+
+                <h3>
+                    ARCHITECTURAL WORLD
+                </h3>
+
+                <p>
+                    Interior / exterior visualization
+                </p>
+
+            </article>
+
+
+            <!-- DIGITAL -->
+
+            <article data-t="digital">
+
+                <div class="media c"></div>
+
+                <h3>
+                    IMMERSIVE DIGITAL
+                </h3>
+
+                <p>
+                    Web · VR · interactive environments
+                </p>
+
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         INTERACTIVE 3D VIEWER
+    ========================== -->
+
+    <section class="viewer-section">
+
+        <div class="viewer-copy">
+
+            <small>
+                LIVE MODEL VIEWER
+            </small>
+
+            <h2>
+                Your model.<br>
+                <i>On the web.</i>
+            </h2>
+
+            <p>
+                Your GLB model is loaded directly from:
+            </p>
+
+            <p>
+                <code>
+                    assets/models/3dmodel.glb
+                </code>
+            </p>
+
+            <div class="viewer-controls">
+
+                <button id="reset">
+                    RESET
+                </button>
+
+                <button id="wire">
+                    WIREFRAME
+                </button>
+
+                <button id="auto">
+                    AUTO ROTATE
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="viewer">
+
+            <canvas id="model"></canvas>
+
+            <span id="status">
+                LOADING 3DMODEL.GLB…
+            </span>
+
+            <label>
+                DRAG · ROTATE / WHEEL · ZOOM
+            </label>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         SERVICES
+    ========================== -->
+
+    <section id="services" class="services">
+
+        <small>
+            02 / SERVICES
+        </small>
+
+        <div>
+
+            <div>
+
+                <b>01</b>
+
+                <h3>
+                    3D MODELING
+                </h3>
+
+                <p>
+                    Products, furniture, environments
+                    and detailed assets.
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <b>02</b>
+
+                <h3>
+                    PHOTOREALISTIC RENDERING
+                </h3>
+
+                <p>
+                    Product, e-commerce, advertising
+                    and architectural imagery.
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <b>03</b>
+
+                <h3>
+                    ANIMATION
+                </h3>
+
+                <p>
+                    Cinematic product animation
+                    and motion design.
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <b>04</b>
+
+                <h3>
+                    INTERACTIVE 3D
+                </h3>
+
+                <p>
+                    WebGL, GLB viewers, configurators,
+                    VR/AR and Unreal Engine.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         STUDIO
+    ========================== -->
+
+    <section id="studio" class="studio">
+
+        <small>
+            03 / STUDIO
+        </small>
+
+        <h2>
+            From the first line<br>
+            to the final pixel.
+        </h2>
+
+        <p>
+            Blender · Unreal Engine · Unity · QGIS ·
+            ArcGIS · Python · Adobe Creative Cloud
+        </p>
+
+    </section>
+
+
+    <!-- =========================
+         CONTACT
+    ========================== -->
+
+    <section id="contact" class="contact">
+
+        <small>
+            04 / CONTACT
+        </small>
+
+        <h2>
+            Have a shape<br>
+            in mind?
+        </h2>
+
+        <a class="btn" href="mailto:hello@linezero.studio">
+            LET'S BUILD IT ↗
+        </a>
+
+        <p>
+            Replace the email address with your real
+            Line Zero contact email.
+        </p>
+
+    </section>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer>
+
+        <b>
+            LINE ZERO
+        </b>
+
+        <span>
+            BEYOND SHAPES.
+        </span>
+
+        <span>
+            © 2026
+        </span>
+
+    </footer>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <script type="module" src="js/main.js"></script>
+
+</body>
+
+</html>
